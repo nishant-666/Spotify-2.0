@@ -1,0 +1,44 @@
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  width: 300px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.inner {
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.trackImage {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.trackName {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.playbtn {
+  margin-top: 20px;
+}
+
+.spotifyPlayer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
