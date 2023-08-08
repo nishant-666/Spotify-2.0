@@ -4,4 +4,13 @@
   align-items: center;
   height: auto;
   padding: 20px;
+  background-color: rgb(19, 18, 18);
+  min-height: 100vh;
+  height: auto;
+}
+
+.refreshBtn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }

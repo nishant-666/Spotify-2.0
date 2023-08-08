@@ -1,8 +1,8 @@
 .player {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .input {
@@ -11,26 +11,62 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, auto);
-  gap: 20px;
-  margin-top: 30px;
+  grid-template-columns: repeat(4, auto);
 }
 
 .inner {
-  text-align: center;
   padding: 20px;
   cursor: pointer;
+  background-color: #212121;
+  border-radius: 10px;
+}
+
+.inner:hover {
+  background-color: #0f0f0f;
 }
 
 .trackImage {
-  width: 250px;
-  height: 250px;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
 }
 
-.trackName {
-  margin-top: 20px;
-  font-size: 24px;
+.toptrackImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+}
+
+.topresults {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+.resultList {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  transform: translateY(-20%);
+  transition: top 0.3s ease, font-size 0.3s ease;
+}
+
+.topheader {
+  font-size: 25px;
+  margin-left: 0px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.songHeader {
+  font-size: 25px;
+  margin-left: 25px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .playbtn {
@@ -41,4 +77,55 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  left: 0;
+}
+
+.header {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  transform: translateY(-180%);
+  transition: top 0.3s ease, font-size 0.3s ease;
+}
+
+.songList {
+  display: flex;
+  gap: 20px;
+  margin: 10px;
+  align-items: center;
+  height: 0px;
+  cursor: pointer;
+  padding: 30px;
+}
+
+.songList:hover {
+  background-color: #212121;
+  display: flex;
+  gap: 20px;
+  margin: 10px;
+  align-items: center;
+  height: 0px;
+  cursor: pointer;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.trackName {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.toptrackName {
+  font-size: 21px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.topArtistName {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.trackArtist {
+  font-size: 14px;
 }

@@ -9,15 +9,15 @@ export default function Home() {
 
   useEffect(() => {
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
-    let token = sessionStorage.getItem("access_token");
-    if (!token) {
-      getToken();
-    }
   }, []);
 
   const authorizeApp = async () => {
     await authorize();
   };
+
+  useEffect(() => {
+    getToken();
+  }, [codeVerifier]);
 
   return (
     <>
@@ -29,6 +29,11 @@ export default function Home() {
       <main className={styles.main}>
         {codeVerifier ? (
           <>
+            <div className={styles.refreshBtn}>
+              <button onClick={authorizeApp} className="btn btn-accent">
+                Refresh Token
+              </button>
+            </div>
             <Player />
           </>
         ) : (

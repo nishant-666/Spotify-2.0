@@ -36,29 +36,25 @@ if (typeof window !== "undefined") {
 }
 
 export const authorize = async () => {
-  generateCodeChallenge(codeVerifier)
-    .then((codeChallenge) => {
-      let state: string = generateRandomString(16);
-      let scope: string =
-        "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
+  generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+    let state: string = generateRandomString(16);
+    let scope: string =
+      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
 
-      sessionStorage.setItem("code_verifier", codeVerifier);
+    sessionStorage.setItem("code_verifier", codeVerifier);
 
-      let args = new URLSearchParams({
-        response_type: "code",
-        client_id: SPOTIFY_CLIENT_ID,
-        scope: scope,
-        redirect_uri: redirectUri,
-        state: state,
-        code_challenge_method: "S256",
-        code_challenge: codeChallenge,
-      });
-
-      window.location.href = "https://accounts.spotify.com/authorize?" + args;
-    })
-    .then(async () => {
-      await getToken();
+    let args = new URLSearchParams({
+      response_type: "code",
+      client_id: SPOTIFY_CLIENT_ID,
+      scope: scope,
+      redirect_uri: redirectUri,
+      state: state,
+      code_challenge_method: "S256",
+      code_challenge: codeChallenge,
     });
+
+    window.location.href = "https://accounts.spotify.com/authorize?" + args;
+  });
 };
 
 export const getToken = async () => {
