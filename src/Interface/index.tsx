@@ -3,3 +3,15 @@ interface SpotifyPlayerType {
   currentTrack: string;
   playing: boolean;
 }
+
+interface ArtistInterface {
+  artists: {
+    map: Function;
+  };
+}
+
+interface AlbumsInterface {
+  albums: {
+    map: Function;
+  };
+}

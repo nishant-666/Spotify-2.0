@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./Player.module.css";
 import { getTracks } from "@/API/APIs";
 import SpotifyPlayerComponent from "../SpotifyPlayer";
-import Categories from "../Categories";
+import Artists from "../Artists";
+import Albums from "../Albums";
 
 export default function Player() {
   const [searchInput, setSearchInput] = useState("");
@@ -10,6 +11,8 @@ export default function Player() {
   const [currentTrack, setCurrentTrack] = useState("");
   const [access_token, setAccessToken] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [artists, setArtists] = useState([]);
+  const [albums, setAlbums] = useState([]);
   const [topTrack, setTopTrack] = useState({
     uri: "",
     trackName: "",
@@ -24,7 +27,9 @@ export default function Player() {
   const fetchTracks = async () => {
     if (searchInput) {
       let response = await getTracks(searchInput);
-      console.log(response.tracks.items[0].name);
+
+      setArtists(response.artists.items);
+      setAlbums(response.albums.items);
       setTopTrack({
         uri: response.tracks.items[0].uri,
         trackName: response.tracks.items[0].name,
@@ -72,6 +77,8 @@ export default function Player() {
     setSearchInput("");
     setCurrentTrack("");
     setIsPlaying(false);
+    setArtists([]);
+    setAlbums([]);
   };
 
   useEffect(() => {
@@ -140,8 +147,8 @@ export default function Player() {
                       <img className={styles.trackImage} src={track.images} />
                       <div>
                         <p className={styles.trackName}>
-                          {track.name.length > 30
-                            ? `${track.name.substring(0, 30)}..`
+                          {track.name.length > 15
+                            ? `${track.name.substring(0, 15)}..`
                             : track.name}
                         </p>
                         <p className={styles.trackArtist}>
@@ -160,7 +167,8 @@ export default function Player() {
           <></>
         )}
       </div>
-
+      {artists.length ? <Artists artists={artists} /> : <></>}
+      {albums.length ? <Albums albums={albums} /> : <></>}
       {searchResults.length && isPlaying ? (
         <div className={styles.spotifyPlayer}>
           <SpotifyPlayerComponent

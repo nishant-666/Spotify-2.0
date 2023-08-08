@@ -1,0 +1,44 @@
+.albumsMain {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.albumList {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  width: 100%;
+  gap: 20px;
+}
+
+.albumHeader {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.album {
+  background-color: rgb(25, 25, 25);
+  padding: 20px;
+  cursor: pointer;
+}
+
+.album:hover {
+  background-color: rgb(53, 53, 53);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.8s;
+}
+
+.albumImage {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+}
+
+.albumName {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 20px;
+  color: white;
+}
