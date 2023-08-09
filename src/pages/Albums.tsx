@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { getAlbumTrack } from "@/API/APIs";
 import styles from "@/styles/Album.module.css";
 import SpotifyPlayerComponent from "@/components/SpotifyPlayer";
-import { authorize, getToken } from "@/API/authorize";
 import { convertMsToMinutesSeconds } from "@/helpers/timeConvert";
 
 export default function Albums() {
@@ -11,12 +10,7 @@ export default function Albums() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [access_token, setAccessToken] = useState("");
   const [currentTrack, setCurrentTrack] = useState("");
-  const [codeVerifier, setCodeVerifier] = useState("");
   const router = useRouter();
-
-  const authorizeApp = async () => {
-    await authorize();
-  };
 
   const fetchArtistTrack = async () => {
     let response = await getAlbumTrack(router.query.id);
@@ -31,21 +25,10 @@ export default function Albums() {
     let token = sessionStorage.getItem("access_token");
     setAccessToken(token || "");
     fetchArtistTrack();
-    setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
   }, []);
-  console.log(currentTrack);
-  useEffect(() => {
-    getToken();
-  }, [codeVerifier]);
 
-  console.log(albumsTrack);
   return (
-    <div className={styles.artistsMain}>
-      <div className={styles.refreshBtn}>
-        <button onClick={authorizeApp} className="btn btn-accent">
-          Refresh Token
-        </button>
-      </div>
+    <div className={styles.albumsMain}>
       <div>
         <p className={styles.artistHeader}>Album Tracks</p>
         <div className={styles.artistList}>

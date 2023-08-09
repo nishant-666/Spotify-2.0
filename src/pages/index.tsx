@@ -1,24 +1,8 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
-import { authorize, getToken } from "@/API/authorize";
-import Player from "@/components/Player";
+import HomeComponent from "@/components/Home";
 
 export default function Home() {
-  const [codeVerifier, setCodeVerifier] = useState("");
-
-  useEffect(() => {
-    setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
-  }, []);
-
-  const authorizeApp = async () => {
-    await authorize();
-  };
-
-  useEffect(() => {
-    getToken();
-  }, [codeVerifier]);
-
   return (
     <>
       <Head>
@@ -27,20 +11,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {codeVerifier ? (
-          <>
-            <div className={styles.refreshBtn}>
-              <button onClick={authorizeApp} className="btn btn-accent">
-                Refresh Token
-              </button>
-            </div>
-            <Player />
-          </>
-        ) : (
-          <button onClick={authorizeApp} className="btn btn-accent">
-            Authorize
-          </button>
-        )}
+        <HomeComponent />
       </main>
     </>
   );

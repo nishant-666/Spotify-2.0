@@ -28,8 +28,8 @@ export default function Player() {
     if (searchInput) {
       let response = await getTracks(searchInput);
 
-      setArtists(response.artists.items);
-      setAlbums(response.albums.items);
+      setArtists(response?.artists.items);
+      setAlbums(response?.albums.items);
       setTopTrack({
         uri: response.tracks.items[0].uri,
         trackName: response.tracks.items[0].name,

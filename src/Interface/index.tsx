@@ -15,3 +15,13 @@ interface AlbumsInterface {
     map: Function;
   };
 }
+
+interface ModalType {
+  triggerModal: boolean;
+  setModalTrigger: Function;
+  children: React.ReactNode;
+}
+
+interface ArtistList {
+  id: string;
+}

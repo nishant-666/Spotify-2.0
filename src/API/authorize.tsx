@@ -1,7 +1,8 @@
-const SPOTIFY_CLIENT_ID: string = ``;
+const SPOTIFY_CLIENT_ID: string = `0063f86f7a194a6398730fe707b0965b`;
+const client_secret: string = "b8e1c43827a848188fd9b6e1936449da";
 const redirectUri: string = "http://localhost:3000";
 
-function generateRandomString(length: number): string {
+export function generateRandomString(length: number): string {
   let text = "";
   let possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -12,79 +13,73 @@ function generateRandomString(length: number): string {
   return text;
 }
 
-async function generateCodeChallenge(codeVerifier: string): Promise<string> {
-  function base64encode(string: Uint8Array): string {
-    return btoa(String.fromCharCode.apply(null, Array.from(string)))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-  }
-
-  const encoder = new TextEncoder();
-  const data = encoder.encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", data);
-
-  return base64encode(new Uint8Array(digest));
-}
-
-let codeVerifier: string = generateRandomString(128);
-
-let urlParams = new URLSearchParams();
-
-if (typeof window !== "undefined") {
-  urlParams = new URLSearchParams(window.location.search);
-}
-
 export const authorize = async () => {
-  generateCodeChallenge(codeVerifier).then((codeChallenge) => {
-    let state: string = generateRandomString(16);
-    let scope: string =
-      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
+  const state = generateRandomString(16);
+  const scope =
+    "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
 
-    sessionStorage.setItem("code_verifier", codeVerifier);
-
-    let args = new URLSearchParams({
-      response_type: "code",
-      client_id: SPOTIFY_CLIENT_ID,
-      scope: scope,
-      redirect_uri: redirectUri,
-      state: state,
-      code_challenge_method: "S256",
-      code_challenge: codeChallenge,
-    });
-
-    window.location.href = "https://accounts.spotify.com/authorize?" + args;
+  let body = new URLSearchParams({
+    response_type: "code",
+    client_id: SPOTIFY_CLIENT_ID,
+    scope: scope,
+    redirect_uri: redirectUri,
+    state: state,
   });
+
+  try {
+    window.location.href = "https://accounts.spotify.com/authorize?" + body;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const getToken = async () => {
-  let codeVerifier = sessionStorage.getItem("code_verifier");
-  let code = urlParams.get("code");
+export const getToken = async (code: string) => {
   let body = new URLSearchParams({
-    grant_type: "authorization_code" || "",
-    code: code || "",
-    redirect_uri: redirectUri || "",
-    client_id: SPOTIFY_CLIENT_ID || "",
-    code_verifier: codeVerifier || "",
+    code: code,
+    redirect_uri: redirectUri,
+    grant_type: "authorization_code",
   });
 
-  await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: body,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("HTTP status " + response.status);
-      }
-      return response.json();
-    })
-    .then((data: { access_token: string }) => {
-      sessionStorage.setItem("access_token", data.access_token);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+  try {
+    let response = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "Basic " +
+          Buffer.from(`${SPOTIFY_CLIENT_ID}:${client_secret}`).toString(
+            "base64"
+          ),
+      },
+      body: body,
     });
+    // window.history.pushState({}, "", "/");
+    return response.json();
+  } catch (error) {
+    window.location.href = "/";
+  }
+};
+
+export const refreshSpotifyToken = async (refresh_token: string) => {
+  let body = new URLSearchParams({
+    refresh_token: refresh_token,
+    grant_type: "refresh_token",
+  });
+
+  try {
+    let response = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "Basic " +
+          Buffer.from(`${SPOTIFY_CLIENT_ID}:${client_secret}`).toString(
+            "base64"
+          ),
+      },
+      body: body,
+    });
+
+    return response.json();
+  } catch (error) {
+    window.location.href = "/";
+  }
 };

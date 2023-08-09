@@ -1,9 +1,9 @@
-.artistsMain {
+.albumsMain {
   display: flex;
-  justify-content: center;
+  width: 100%;
   min-height: 100vh;
   height: auto;
-  background-color: #0f0f0f;
+  background-color: black;
 }
 
 .artistList {
@@ -58,11 +58,4 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  left: 0;
-}
-
-.refreshBtn {
-  position: absolute;
-  right: 20px;
-  top: 20px;
 }
