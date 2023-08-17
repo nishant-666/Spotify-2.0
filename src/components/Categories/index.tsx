@@ -1,4 +1,3 @@
-import { browseCategories } from "@/API/APIs";
 import React, { useEffect, useState } from "react";
 import styles from "./Category.module.css";
 import { useRouter } from "next/router";
@@ -6,13 +5,7 @@ import { useRouter } from "next/router";
 export default function Categories() {
   const router = useRouter();
   const [categories, setCategories] = useState([]);
-  const getCategories = async () => {
-    let response = await browseCategories();
-    setCategories(response?.categories?.items);
-  };
-  useEffect(() => {
-    getCategories();
-  }, []);
+
   return (
     <div className={styles.grid}>
       {categories.map((category: { name: ""; icons: [{ url: "" }] }) => (

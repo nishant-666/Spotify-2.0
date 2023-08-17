@@ -11,8 +11,8 @@ export default function Player() {
   const [currentTrack, setCurrentTrack] = useState("");
   const [access_token, setAccessToken] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  const [artists, setArtists] = useState([]);
-  const [albums, setAlbums] = useState([]);
+  // const [artists, setArtists] = useState([]);
+  // const [albums, setAlbums] = useState([]);
   const [topTrack, setTopTrack] = useState({
     uri: "",
     trackName: "",
@@ -28,8 +28,8 @@ export default function Player() {
     if (searchInput) {
       let response = await getTracks(searchInput);
 
-      setArtists(response.artists.items);
-      setAlbums(response.albums.items);
+      // setArtists(response.artists.items);
+      // setAlbums(response.albums.items);
       setTopTrack({
         uri: response.tracks.items[0].uri,
         trackName: response.tracks.items[0].name,
@@ -77,8 +77,8 @@ export default function Player() {
     setSearchInput("");
     setCurrentTrack("");
     setIsPlaying(false);
-    setArtists([]);
-    setAlbums([]);
+    // setArtists([]);
+    // setAlbums([]);
   };
 
   useEffect(() => {
@@ -167,8 +167,8 @@ export default function Player() {
           <></>
         )}
       </div>
-      {artists.length ? <Artists artists={artists} /> : <></>}
-      {albums.length ? <Albums albums={albums} /> : <></>}
+      {/* {artists.length ? <Artists artists={artists} /> : <></>}
+      {albums.length ? <Albums albums={albums} /> : <></>} */}
       {searchResults.length && isPlaying ? (
         <div className={styles.spotifyPlayer}>
           <SpotifyPlayerComponent

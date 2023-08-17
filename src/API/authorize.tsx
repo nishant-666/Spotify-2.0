@@ -1,9 +1,9 @@
-const SPOTIFY_CLIENT_ID: string = ``;
+const SPOTIFY_CLIENT_ID: string = `0063f86f7a194a6398730fe707b0965b`;
 const redirectUri: string = "http://localhost:3000";
 
 function generateRandomString(length: number): string {
   let text = "";
-  let possible =
+  const possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   for (let i = 0; i < length; i++) {
@@ -27,7 +27,7 @@ async function generateCodeChallenge(codeVerifier: string): Promise<string> {
   return base64encode(new Uint8Array(digest));
 }
 
-let codeVerifier: string = generateRandomString(128);
+const codeVerifier: string = generateRandomString(128);
 
 let urlParams = new URLSearchParams();
 
@@ -37,13 +37,13 @@ if (typeof window !== "undefined") {
 
 export const authorize = async () => {
   generateCodeChallenge(codeVerifier).then((codeChallenge) => {
-    let state: string = generateRandomString(16);
-    let scope: string =
+    const state: string = generateRandomString(16);
+    const scope: string =
       "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
 
     sessionStorage.setItem("code_verifier", codeVerifier);
 
-    let args = new URLSearchParams({
+    const args = new URLSearchParams({
       response_type: "code",
       client_id: SPOTIFY_CLIENT_ID,
       scope: scope,
@@ -57,34 +57,48 @@ export const authorize = async () => {
   });
 };
 
-export const getToken = async () => {
-  let codeVerifier = sessionStorage.getItem("code_verifier");
-  let code = urlParams.get("code");
-  let body = new URLSearchParams({
+export const getToken = async (code: string) => {
+  const codeVerifier = sessionStorage.getItem("code_verifier");
+
+  const body = new URLSearchParams({
     grant_type: "authorization_code" || "",
     code: code || "",
     redirect_uri: redirectUri || "",
     client_id: SPOTIFY_CLIENT_ID || "",
     code_verifier: codeVerifier || "",
   });
-
-  await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: body,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("HTTP status " + response.status);
-      }
-      return response.json();
-    })
-    .then((data: { access_token: string }) => {
-      sessionStorage.setItem("access_token", data.access_token);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+  try {
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: body,
     });
+
+    return response.json();
+  } catch (error) {
+    window.location.href = "/";
+  }
+};
+
+export const refreshSpotifyToken = async (refresh_token: string) => {
+  const body = new URLSearchParams({
+    grant_type: "refresh_token" || "",
+    refresh_token: refresh_token,
+    client_id: SPOTIFY_CLIENT_ID || "",
+  });
+  try {
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: body,
+    });
+
+    return response.json();
+  } catch (err) {
+    console.log(err);
+  }
 };

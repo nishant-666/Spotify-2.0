@@ -2,23 +2,14 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { authorize, getToken } from "@/API/authorize";
+import useRefreshToken from "@/hooks/useRefreshToken";
 import Player from "@/components/Player";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const [codeVerifier, setCodeVerifier] = useState("");
-
-  useEffect(() => {
-    setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
-  }, []);
-
-  const authorizeApp = async () => {
-    await authorize();
-  };
-
-  useEffect(() => {
-    getToken();
-  }, [codeVerifier]);
-
+  const router = useRouter();
+  const code = router.query.code;
+  useRefreshToken(code as string);
   return (
     <>
       <Head>
@@ -27,17 +18,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {codeVerifier ? (
+        {code ? (
           <>
-            <div className={styles.refreshBtn}>
-              <button onClick={authorizeApp} className="btn btn-accent">
-                Refresh Token
-              </button>
-            </div>
             <Player />
           </>
         ) : (
-          <button onClick={authorizeApp} className="btn btn-accent">
+          <button onClick={authorize} className="btn btn-accent">
             Authorize
           </button>
         )}
