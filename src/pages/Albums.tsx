@@ -33,10 +33,6 @@ export default function Albums() {
     fetchArtistTrack();
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
   }, []);
-  console.log(currentTrack);
-  useEffect(() => {
-    getToken();
-  }, [codeVerifier]);
 
   console.log(albumsTrack);
   return (

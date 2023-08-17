@@ -34,10 +34,6 @@ export default function Artists() {
     setCodeVerifier(sessionStorage.getItem("code_verifier") || "");
   }, []);
 
-  useEffect(() => {
-    getToken();
-  }, [codeVerifier]);
-
   return (
     <div className={styles.artistsMain}>
       <button onClick={() => router.push("/")} className="btn btn-accent">
